@@ -12,10 +12,11 @@ const InstantQuoteWidget: React.FC = () => {
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [selectedIssue, setSelectedIssue] = useState<string>('');
 
-  const availableBrands = Object.keys(REPAIR_PRICES);
-  const availableModels = selectedBrand ? Object.keys(REPAIR_PRICES[selectedBrand] || {}) : [];
+  const availableBrands = [...Object.keys(REPAIR_PRICES), 'Other'];
+  const availableModels = selectedBrand === 'Other' ? ['Unknown / Other Model'] : (selectedBrand ? Object.keys(REPAIR_PRICES[selectedBrand] || {}) : []);
   
   const estimatedPrice = useMemo(() => {
+    if (selectedBrand === 'Other') return 'Call Us';
     if (!selectedBrand || !selectedModel || !selectedIssue) return null;
     return REPAIR_PRICES[selectedBrand]?.[selectedModel]?.[selectedIssue] || 'N/A';
   }, [selectedBrand, selectedModel, selectedIssue]);
@@ -156,8 +157,13 @@ const InstantQuoteWidget: React.FC = () => {
                     className="w-full appearance-none bg-white border border-gray-200 rounded-xl py-4 pl-12 pr-10 font-bold text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e21a22]"
                     value={selectedBrand}
                     onChange={(e) => {
-                      setSelectedBrand(e.target.value);
-                      setSelectedModel('');
+                      const val = e.target.value;
+                      setSelectedBrand(val);
+                      if (val === 'Other') {
+                        setSelectedModel('Unknown / Other Model');
+                      } else {
+                        setSelectedModel('');
+                      }
                     }}
                   >
                     <option value="" disabled>Select Device Type</option>
@@ -244,11 +250,29 @@ const InstantQuoteWidget: React.FC = () => {
                   {estimatedPrice}
                 </div>
                 <p className="text-sm font-medium mb-1">Most repairs done in</p>
-                <p className="text-[#e21a22] font-bold mb-6">under 1 hour!</p>
+                <p className="text-[#e21a22] font-bold mb-6">{selectedBrand === 'Other' ? 'for a custom quote!' : 'under 1 hour!'}</p>
                 <a href="tel:7134716760" onClick={() => track('Quote Result Call Button Clicked', { price: estimatedPrice || 'N/A' })} className="w-full bg-[#e21a22] hover:bg-red-700 text-white font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 transition-colors mb-3 shadow-md">
                   <Phone className="w-5 h-5 fill-current" />
                   CALL NOW TO BOOK
                 </a>
+
+                {/* Lead Capture Form */}
+                <div className="mt-4 pt-5 border-t border-gray-800 text-left w-full">
+                  <p className="text-[11px] font-bold text-gray-400 mb-3 uppercase tracking-wider text-center">Or Have Us Call You</p>
+                  <div className="space-y-3">
+                    <input type="text" placeholder="Your Name" className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#e21a22] transition-colors" />
+                    <input type="tel" placeholder="Phone Number" className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#e21a22] transition-colors" />
+                    <button 
+                      onClick={() => {
+                        track('Lead Form Submitted');
+                        alert('Thank you! We have received your info and will call you back shortly.');
+                      }}
+                      className="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-lg text-sm transition-colors shadow-sm"
+                    >
+                      REQUEST CALL BACK
+                    </button>
+                  </div>
+                </div>
               </div>
               <button 
                   onClick={() => setStep(2)}
