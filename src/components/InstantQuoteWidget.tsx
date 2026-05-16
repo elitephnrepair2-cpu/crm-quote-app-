@@ -256,23 +256,7 @@ const InstantQuoteWidget: React.FC = () => {
                   CALL NOW TO BOOK
                 </a>
 
-                {/* Lead Capture Form */}
-                <div className="mt-4 pt-5 border-t border-gray-800 text-left w-full">
-                  <p className="text-[11px] font-bold text-gray-400 mb-3 uppercase tracking-wider text-center">Or Have Us Call You</p>
-                  <div className="space-y-3">
-                    <input type="text" placeholder="Your Name" className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#e21a22] transition-colors" />
-                    <input type="tel" placeholder="Phone Number" className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#e21a22] transition-colors" />
-                    <button 
-                      onClick={() => {
-                        track('Lead Form Submitted');
-                        alert('Thank you! We have received your info and will call you back shortly.');
-                      }}
-                      className="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-lg text-sm transition-colors shadow-sm"
-                    >
-                      REQUEST CALL BACK
-                    </button>
-                  </div>
-                </div>
+
               </div>
               <button 
                   onClick={() => setStep(2)}
