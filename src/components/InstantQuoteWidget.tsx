@@ -5,7 +5,7 @@ import {
   Menu, Timer, Tag, Clock, ThumbsUp, Calculator, 
   Wrench, Star, MapPin, MessageCircle, ArrowRight
 } from 'lucide-react';
-
+import { track } from '@vercel/analytics';
 const InstantQuoteWidget: React.FC = () => {
   const [step, setStep] = useState(1);
   const [selectedBrand, setSelectedBrand] = useState<string>('');
@@ -30,13 +30,11 @@ const InstantQuoteWidget: React.FC = () => {
       {/* Top Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-gray-800 bg-black sticky top-0 z-50">
         <div className="flex items-center">
-          {/* Logo Placeholder */}
-          <div className="font-black text-xl leading-tight tracking-tighter">
-            ELIT<span className="text-gray-400 text-sm align-middle inline-block mx-0.5">📞</span><br/><span className="text-white">P</span><span className="text-[#e21a22]">H</span><span className="text-white">ONE</span><br/>REPA<span className="text-gray-400 text-sm align-middle inline-block mx-0.5">🔧</span>R
-          </div>
+          {/* Logo */}
+          <img src="/logo.png" alt="Elite Phone Repair Logo" className="h-12 w-auto bg-white rounded-md p-0.5 shadow-sm" />
         </div>
         <div className="flex items-center gap-3">
-          <a href="tel:7134716760" className="bg-[#e21a22] text-white flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-xs shadow-md">
+          <a href="tel:7134716760" onClick={() => track('Top Header Call Button Clicked')} className="bg-[#e21a22] text-white flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-xs shadow-md">
             <Phone className="w-5 h-5 fill-current" />
             <div className="flex flex-col text-left leading-none tracking-tight">
               <span className="text-[9px] mb-0.5">CALL / TEXT</span>
@@ -247,7 +245,7 @@ const InstantQuoteWidget: React.FC = () => {
                 </div>
                 <p className="text-sm font-medium mb-1">Most repairs done in</p>
                 <p className="text-[#e21a22] font-bold mb-6">under 1 hour!</p>
-                <a href="tel:7134716760" className="w-full bg-[#e21a22] hover:bg-red-700 text-white font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 transition-colors mb-3 shadow-md">
+                <a href="tel:7134716760" onClick={() => track('Quote Result Call Button Clicked', { price: estimatedPrice || 'N/A' })} className="w-full bg-[#e21a22] hover:bg-red-700 text-white font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 transition-colors mb-3 shadow-md">
                   <Phone className="w-5 h-5 fill-current" />
                   CALL NOW TO BOOK
                 </a>
@@ -277,7 +275,7 @@ const InstantQuoteWidget: React.FC = () => {
                 <p className="text-[11px] text-gray-600 mb-2 leading-tight">Call or text us and we'll<br/>help you right away!</p>
               </div>
               <div className="flex-shrink-0">
-                 <a href="tel:7134716760" className="block w-full border border-[#d01017] text-[#d01017] text-center font-bold py-2 px-3 rounded-md text-[11px] leading-tight hover:bg-red-50">
+                 <a href="tel:7134716760" onClick={() => track('Footer Call Button Clicked')} className="block w-full border border-[#d01017] text-[#d01017] text-center font-bold py-2 px-3 rounded-md text-[11px] leading-tight hover:bg-red-50">
                   CALL / TEXT<br/><span className="text-[13px]">(713) 471-6760</span>
                 </a>
               </div>
