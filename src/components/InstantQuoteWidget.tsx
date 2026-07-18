@@ -26,6 +26,21 @@ const InstantQuoteWidget: React.FC = () => {
     else if (step === 2 && selectedIssue) setStep(3);
   };
 
+  React.useEffect(() => {
+    if (step === 3) {
+      if (typeof window !== 'undefined' && (window as any).ttq) {
+        const numericPrice = estimatedPrice ? parseFloat(estimatedPrice.replace(/[^0-9.]/g, '')) : 0;
+        (window as any).ttq.track('ViewContent', {
+          content_name: 'Instant Quote',
+          value: isNaN(numericPrice) ? 0 : numericPrice,
+          currency: 'USD'
+        }, {
+          test_event_code: 'TEST35714'
+        });
+      }
+    }
+  }, [step, estimatedPrice]);
+
   return (
     <div className="bg-black min-h-screen text-white font-sans pb-24">
       {/* Top Header */}
@@ -35,7 +50,12 @@ const InstantQuoteWidget: React.FC = () => {
           <img src="/logo.png" alt="Elite Phone Repair Logo" className="h-12 w-auto bg-white rounded-md p-0.5 shadow-sm" />
         </div>
         <div className="flex items-center gap-3">
-          <a href="tel:7134716760" onClick={() => track('Top Header Call Button Clicked')} className="bg-[#e21a22] text-white flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-xs shadow-md">
+          <a href="tel:7134716760" onClick={() => {
+            track('Top Header Call Button Clicked');
+            if (typeof window !== 'undefined' && (window as any).ttq) {
+              (window as any).ttq.track('Contact', {}, { test_event_code: 'TEST35714' });
+            }
+          }} className="bg-[#e21a22] text-white flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-xs shadow-md">
             <Phone className="w-5 h-5 fill-current" />
             <div className="flex flex-col text-left leading-none tracking-tight">
               <span className="text-[9px] mb-0.5">CALL / TEXT</span>
@@ -251,7 +271,12 @@ const InstantQuoteWidget: React.FC = () => {
                 </div>
                 <p className="text-sm font-medium mb-1">Most repairs done in</p>
                 <p className="text-[#e21a22] font-bold mb-6">{selectedBrand === 'Other' ? 'for a custom quote!' : 'under 1 hour!'}</p>
-                <a href="tel:7134716760" onClick={() => track('Quote Result Call Button Clicked', { price: estimatedPrice || 'N/A' })} className="w-full bg-[#e21a22] hover:bg-red-700 text-white font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 transition-colors mb-3 shadow-md">
+                <a href="tel:7134716760" onClick={() => {
+                  track('Quote Result Call Button Clicked', { price: estimatedPrice || 'N/A' });
+                  if (typeof window !== 'undefined' && (window as any).ttq) {
+                    (window as any).ttq.track('Contact', {}, { test_event_code: 'TEST35714' });
+                  }
+                }} className="w-full bg-[#e21a22] hover:bg-red-700 text-white font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 transition-colors mb-3 shadow-md">
                   <Phone className="w-5 h-5 fill-current" />
                   CALL NOW TO BOOK
                 </a>
@@ -283,7 +308,12 @@ const InstantQuoteWidget: React.FC = () => {
                 <p className="text-[11px] text-gray-600 mb-2 leading-tight">Call or text us and we'll<br/>help you right away!</p>
               </div>
               <div className="flex-shrink-0">
-                 <a href="tel:7134716760" onClick={() => track('Footer Call Button Clicked')} className="block w-full border border-[#d01017] text-[#d01017] text-center font-bold py-2 px-3 rounded-md text-[11px] leading-tight hover:bg-red-50">
+                 <a href="tel:7134716760" onClick={() => {
+                  track('Footer Call Button Clicked');
+                  if (typeof window !== 'undefined' && (window as any).ttq) {
+                    (window as any).ttq.track('Contact', {}, { test_event_code: 'TEST35714' });
+                  }
+                }} className="block w-full border border-[#d01017] text-[#d01017] text-center font-bold py-2 px-3 rounded-md text-[11px] leading-tight hover:bg-red-50">
                   CALL / TEXT<br/><span className="text-[13px]">(713) 471-6760</span>
                 </a>
               </div>
